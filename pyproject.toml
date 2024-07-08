@@ -1,0 +1,24 @@
+
+[project]
+name = "dicomplot"
+version = "0.1.0"
+description = "A brief description of what your project does"
+authors = [{name = "Niels Bassler", email = "nbassler@users.noreply.github.com"}]
+license = { text = "MIT" }
+readme = "README.md"
+dependencies = [
+    "pydicom>=2.3.1"
+
+dev = [
+    "flake8>=6.0.0",
+    "pytest>=7.2.1"
+]
+
+
+[tool.flake8]
+max-line-length = 127
+
+[tool.yapf]
+based_on_style = "pep8"
+column_limit = 127
+
