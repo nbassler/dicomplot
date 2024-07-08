@@ -37,7 +37,7 @@ def plot_map(field_index, energy_layer_index, maps, ax, cbar, fig, max_weight):
     # Normalize spot sizes: This might need adjustment depending on the desired appearance
     sizes = np.array(weights) * 100 / max_weight  # Example scaling factor
 
-    scatter = ax.scatter(x, y, c=weights, cmap='viridis', s=sizes, vmin=0, vmax=max_weight)
+    scatter = ax.scatter(x, y, c=weights, cmap='cividis', s=sizes, vmin=0, vmax=max_weight)
 
     # Update the color bar
     if cbar:
