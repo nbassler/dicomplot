@@ -1,19 +1,21 @@
-
 [project]
 name = "dicomplot"
 version = "0.1.0"
 description = "A brief description of what your project does"
-authors = [{name = "Niels Bassler", email = "nbassler@users.noreply.github.com"}]
+authors = [
+    { name = "Niels Bassler", email = "nbassler@users.noreply.github.com" },
+]
+dependencies = ["pydicom>=2.3.1", "matplotlib>=3.4.3", "numpy>=1.21.2"]
+
 license = { text = "MIT" }
 readme = "README.md"
-dependencies = [
-    "pydicom>=2.3.1"
 
-dev = [
-    "flake8>=6.0.0",
-    "pytest>=7.2.1"
-]
+[project.optional-dependencies]
+dev = ["flake8>=6.0.0", "pytest>=7.2.1"]
 
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.flake8]
 max-line-length = 127
@@ -21,4 +23,3 @@ max-line-length = 127
 [tool.yapf]
 based_on_style = "pep8"
 column_limit = 127
-
