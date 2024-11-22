@@ -42,8 +42,9 @@ def plot_map(field_index, energy_layer_index, maps, ax, cbar, fig, max_weight):
     # Normalize spot sizes: This might need adjustment depending on the desired appearance
     sizes = np.array(weights) * 100 / max_weight  # Example scaling factor
 
-    scatter = ax.scatter(x, y, c=weights, cmap='nipy_spectral', s=sizes,
-                         vmin=0, vmax=max_weight, edgecolors='black', linewidths=0.5, alpha=0.7)
+    # 'cividis' colormap can be used for better colorblind accessibility
+    scatter = ax.scatter(x, y, c=weights, cmap='tab20c', s=sizes,
+                         vmin=0, vmax=max_weight, edgecolors='black', linewidths=0.5, alpha=0.8)
 
     ax.set_aspect('equal')
 
@@ -51,7 +52,6 @@ def plot_map(field_index, energy_layer_index, maps, ax, cbar, fig, max_weight):
     if cbar:
         cbar.update_normal(scatter)
     else:
-        # Using cividis colormap for better colorblind accessibility
         cbar = fig.colorbar(scatter, ax=ax, label='Spot Weight [MU]',
                             orientation='vertical')
 
@@ -78,6 +78,7 @@ def plot_map(field_index, energy_layer_index, maps, ax, cbar, fig, max_weight):
 
 def create_interactive_plot(maps, max_weight):
     fig, ax = plt.subplots()
+    fig.canvas.manager.set_window_title('DicomPlot ' + __version__)
     plt.subplots_adjust(bottom=0.3)
     field_index = [0]  # Current field
     energy_layer_index = [0]  # Current energy layer
@@ -123,10 +124,10 @@ def create_interactive_plot(maps, max_weight):
     ax_layer_prev = plt.axes([0.68, 0.05, 0.1, 0.075])
     ax_layer_next = plt.axes([0.79, 0.05, 0.1, 0.075])
 
-    b_field_next = Button(ax_field_next, 'Next Field')
-    b_field_prev = Button(ax_field_prev, 'Previous Field')
-    b_layer_next = Button(ax_layer_next, 'Next Layer')
-    b_layer_prev = Button(ax_layer_prev, 'Previous Layer')
+    b_field_next = Button(ax_field_next, 'Next\nField')
+    b_field_prev = Button(ax_field_prev, 'Previous\nField')
+    b_layer_next = Button(ax_layer_next, 'Next\nLayer')
+    b_layer_prev = Button(ax_layer_prev, 'Previous\nLayer')
 
     b_field_next.on_clicked(next_field)
     b_field_prev.on_clicked(prev_field)
