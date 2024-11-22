@@ -123,10 +123,10 @@ def create_interactive_plot(maps, max_weight):
     ax_layer_prev = plt.axes([0.68, 0.05, 0.1, 0.075])
     ax_layer_next = plt.axes([0.79, 0.05, 0.1, 0.075])
 
-    b_field_next = Button(ax_field_next, 'Next Field')
-    b_field_prev = Button(ax_field_prev, 'Previous Field')
-    b_layer_next = Button(ax_layer_next, 'Next Layer')
-    b_layer_prev = Button(ax_layer_prev, 'Previous Layer')
+    b_field_next = Button(ax_field_next, 'Next\nField')
+    b_field_prev = Button(ax_field_prev, 'Previous\nField')
+    b_layer_next = Button(ax_layer_next, 'Next\nLayer')
+    b_layer_prev = Button(ax_layer_prev, 'Previous\nLayer')
 
     b_field_next.on_clicked(next_field)
     b_field_prev.on_clicked(prev_field)
