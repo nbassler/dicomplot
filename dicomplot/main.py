@@ -10,7 +10,7 @@ import logging
 import matplotlib.ticker as ticker
 from dicomplot.__version__ import __version__
 
-matplotlib.use('TkAgg')
+matplotlib.use('QtAgg')
 
 
 logger = logging.getLogger(__name__)
