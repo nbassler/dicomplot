@@ -2,12 +2,15 @@ import sys
 import argparse
 import pydicom
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import logging
-
 # Import ticker module for setting tick locators
 import matplotlib.ticker as ticker
+from dicomplot.__version__ import __version__
+
+matplotlib.use('TkAgg')
 
 
 logger = logging.getLogger(__name__)
@@ -65,7 +68,8 @@ def plot_map(field_index, energy_layer_index, maps, ax, cbar, fig, max_weight):
     ax.grid(True, which='minor', color='gray', linestyle=':', linewidth=0.5)
 
     ax.set_title(
-        f"Field {field_index + 1}, Energy Layer {energy_layer_index + 1} - Beam Energy: {energy if energy != -1 else 'N/A'} MeV")
+        f"Field {field_index + 1}, Energy Layer {energy_layer_index + 1} - " +
+        f"Beam Energy: {energy if energy != -1 else 'N/A'} MeV")
     ax.set_xlabel('X Position [cm]')
     ax.set_ylabel('Y Position [cm]')
     plt.draw()
@@ -151,6 +155,8 @@ def main(args=None):
     parser.add_argument('inputfile', help='input filename', type=str)
     parser.add_argument('-v', '--verbosity', action='count', default=0,
                         help='Increase output verbosity.')
+    parser.add_argument('-V', '--version', action='version',
+                        version=f'dicomtag {__version__}')
     parsed_args = parser.parse_args(args)
 
     logging.basicConfig(
