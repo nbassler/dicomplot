@@ -68,7 +68,8 @@ def plot_map(field_index, energy_layer_index, maps, ax, cbar, fig, max_weight):
     ax.grid(True, which='minor', color='gray', linestyle=':', linewidth=0.5)
 
     ax.set_title(
-        f"Field {field_index + 1}, Energy Layer {energy_layer_index + 1} - Beam Energy: {energy if energy != -1 else 'N/A'} MeV")
+        f"Field {field_index + 1}, Energy Layer {energy_layer_index + 1} - " +
+        f"Beam Energy: {energy if energy != -1 else 'N/A'} MeV")
     ax.set_xlabel('X Position [cm]')
     ax.set_ylabel('Y Position [cm]')
     plt.draw()
