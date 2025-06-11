@@ -10,6 +10,7 @@ dependencies = [
     "matplotlib>=3.4.3",
     "numpy>=1.21.2",
     "PyQt6>=6.0",        # Add this line for QtAgg
+    "mplcursors>=0.5.1",
 ]
 license = { text = "MIT" }
 readme = "README.md"

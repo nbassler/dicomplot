@@ -5,10 +5,14 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
+
+import mplcursors  # For interactive data cursors
+
 import logging
 # Import ticker module for setting tick locators
 import matplotlib.ticker as ticker
 from dicomplot.__version__ import __version__
+
 
 matplotlib.use('QtAgg')
 
@@ -26,10 +30,24 @@ def get_spot_map(dicom_object, ion_beam_sequence_index=0, ion_control_point_sequ
     cps = ibs.IonControlPointSequence[ion_control_point_sequence_index]
 
     scan_spot_positions = cps.ScanSpotPositionMap
-    scan_spot_meter_set_weights = cps.ScanSpotMetersetWeights
+    scan_spot_meterset_weights = cps.ScanSpotMetersetWeights
     energy = getattr(cps, 'NominalBeamEnergy', -1)
 
-    return scan_spot_positions, scan_spot_meter_set_weights, energy
+    # convert weights to absolute MU values
+    fgs = dicom_object.FractionGroupSequence[0]
+    if hasattr(fgs, 'ReferencedBeamSequence'):
+        beam = fgs.ReferencedBeamSequence[0]
+        if hasattr(beam, 'BeamMeterset'):
+
+            mu_per_weight = beam.BeamMeterset / ibs.FinalCumulativeMetersetWeight
+            logger.info(
+                f"Beam Meterset: {beam.BeamMeterset},"
+                f" Final Cumulative Meterset Weight: {ibs.FinalCumulativeMetersetWeight}, "
+                f"MU per weight: {mu_per_weight}")
+            scan_spot_meterset = [
+                weight * mu_per_weight for weight in scan_spot_meterset_weights]
+
+    return scan_spot_positions, scan_spot_meterset, energy
 
 
 def plot_map(field_index, energy_layer_index, maps, ax, cbar, fig, max_weight):
@@ -45,6 +63,15 @@ def plot_map(field_index, energy_layer_index, maps, ax, cbar, fig, max_weight):
     # 'cividis' colormap can be used for better colorblind accessibility
     scatter = ax.scatter(x, y, c=weights, cmap='tab20c', s=sizes,
                          vmin=0, vmax=max_weight, edgecolors='black', linewidths=0.5, alpha=0.8)
+
+    # Add interactive data cursors
+    cursor = mplcursors.cursor(scatter, hover=True)
+
+    @cursor.connect("add")
+    def on_add(sel):
+        i = sel.index
+        sel.annotation.set_text(f"MU: {weights[i]:.2f}")
+        sel.annotation.get_bbox_patch().set(alpha=0.7)
 
     ax.set_aspect('equal')
 
