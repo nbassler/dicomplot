@@ -26,10 +26,24 @@ def get_spot_map(dicom_object, ion_beam_sequence_index=0, ion_control_point_sequ
     cps = ibs.IonControlPointSequence[ion_control_point_sequence_index]
 
     scan_spot_positions = cps.ScanSpotPositionMap
-    scan_spot_meter_set_weights = cps.ScanSpotMetersetWeights
+    scan_spot_meterset_weights = cps.ScanSpotMetersetWeights
     energy = getattr(cps, 'NominalBeamEnergy', -1)
 
-    return scan_spot_positions, scan_spot_meter_set_weights, energy
+    # convert weights to absolute MU values
+    fgs = dicom_object.FractionGroupSequence[0]
+    if hasattr(fgs, 'ReferencedBeamSequence'):
+        beam = fgs.ReferencedBeamSequence[0]
+        if hasattr(beam, 'BeamMeterset'):
+
+            mu_per_weight = beam.BeamMeterset / ibs.FinalCumulativeMetersetWeight
+            logger.info(
+                f"Beam Meterset: {beam.BeamMeterset},"
+                f" Final Cumulative Meterset Weight: {ibs.FinalCumulativeMetersetWeight}, "
+                f"MU per weight: {mu_per_weight}")
+            scan_spot_meterset = [
+                weight * mu_per_weight for weight in scan_spot_meterset_weights]
+
+    return scan_spot_positions, scan_spot_meterset, energy
 
 
 def plot_map(field_index, energy_layer_index, maps, ax, cbar, fig, max_weight):
