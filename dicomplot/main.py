@@ -29,8 +29,16 @@ def get_spot_map(dicom_object, ion_beam_sequence_index=0, ion_control_point_sequ
     ibs = dicom_object.IonBeamSequence[ion_beam_sequence_index]
     cps = ibs.IonControlPointSequence[ion_control_point_sequence_index]
 
+    # print icps_index and cps_index:
+    logger.debug(
+        f"IonBeamSequence index {ion_beam_sequence_index}, IonControlPointSequence index {ion_control_point_sequence_index}")
+
     scan_spot_positions = cps.ScanSpotPositionMap
+
     scan_spot_meterset_weights = cps.ScanSpotMetersetWeights
+    # Ensure scan_spot_meterset_weights is always a list/array
+    if not isinstance(scan_spot_meterset_weights, (list, tuple, np.ndarray)):
+        scan_spot_meterset_weights = [scan_spot_meterset_weights]
     energy = getattr(cps, 'NominalBeamEnergy', -1)
 
     # convert weights to absolute MU values
