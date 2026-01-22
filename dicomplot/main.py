@@ -114,7 +114,7 @@ def plot_map(field_index, energy_layer_index, maps, ax, cbar, fig, max_weight):
 def create_interactive_plot(maps, max_weight, filename=''):
     fig, ax = plt.subplots()
     short_version = __version__.split('+')[0]
-    fig.canvas.manager.set_window_title('DicomPlot ' + short_version + '- ' + filename)
+    fig.canvas.manager.set_window_title('DicomPlot ' + short_version + ' - ' + filename)
     plt.subplots_adjust(bottom=0.3)
     field_index = [0]  # Current field
     energy_layer_index = [0]  # Current energy layer
