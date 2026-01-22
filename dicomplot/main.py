@@ -111,9 +111,10 @@ def plot_map(field_index, energy_layer_index, maps, ax, cbar, fig, max_weight):
     return cbar
 
 
-def create_interactive_plot(maps, max_weight):
+def create_interactive_plot(maps, max_weight, filename=''):
     fig, ax = plt.subplots()
-    fig.canvas.manager.set_window_title('DicomPlot ' + __version__)
+    short_version = __version__.split('+')[0]
+    fig.canvas.manager.set_window_title('DicomPlot ' + short_version + ' - ' + filename)
     plt.subplots_adjust(bottom=0.3)
     field_index = [0]  # Current field
     energy_layer_index = [0]  # Current energy layer
@@ -210,7 +211,7 @@ def main(args=None):
         maps.append(field_maps)
 
     max_weight = find_global_max_weight(maps)
-    create_interactive_plot(maps, max_weight)
+    create_interactive_plot(maps, max_weight, filename=parsed_args.inputfile)
 
 
 if __name__ == '__main__':
